@@ -3,6 +3,7 @@ package com.Demo_QuanLyBanHang.QuanLyBanHang.users.services;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.dtos.RegisterRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.dtos.LoginRequest;
 import okhttp3.*;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,37 +12,99 @@ import java.io.IOException;
 public class AuthService {
 
     private final String SUPABASE_URL = "https://jdogabuoifwjfvblnnld.supabase.co";
-    private final String SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impkb2dhYnVvaWZ3amZ2YmxubmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwNzYxMDIsImV4cCI6MjA2ODY1MjEwMn0.kGLiR2cWZ6-cqRL9fOR00Qu_AbBxsrT-AU0oL8Luz8A";
+    private final String SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impkb2dhYnVvaWZ3amZ2YmxubmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwNzYxMDIsImV4cCI6MjA2ODY1MjEwMn0.kGLiR2cWZ6-cqRL9fOR00Qu_AbBxsrT-AU0oL8Luz8A"; // ✅ dùng key anon để gọi Auth API
+    private final String SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impkb2dhYnVvaWZ3amZ2YmxubmxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzA3NjEwMiwiZXhwIjoyMDY4NjUyMTAyfQ.ZsFnD3fRp6w-dKUNObJpFuQmbHR7i_fHJnudZM41BIk"; // ❗ KHÔNG public nếu deploy thật
 
     private final OkHttpClient client = new OkHttpClient();
 
-   public String register(RegisterRequest request) {
-    String json = "{ \"email\": \"" + request.getEmail() + "\", " +
-                  "\"password\": \"" + request.getPassword() + "\", " +
-                  "\"data\": { \"phone\": \"" + request.getPhone() + "\" } }";
+    /**
+     * Gửi thông tin người dùng vào bảng users trong Supabase DB (PostgREST API)
+     */
+    private void insertUserToDatabase(String userId, RegisterRequest request) {
+        JSONObject json = new JSONObject();
+        json.put("id", userId);
+        json.put("email", request.getEmail());
+        json.put("phone", request.getPhone());
+        json.put("name", request.getName());
 
-    RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+        RequestBody body = RequestBody.create(
+                json.toString(),
+                MediaType.parse("application/json")
+        );
 
-    Request req = new Request.Builder()
-            .url(SUPABASE_URL + "/auth/v1/signup")
-            .addHeader("apikey", SUPABASE_API_KEY)
-            .addHeader("Content-Type", "application/json")
-            .post(body)
-            .build();
+        Request dbRequest = new Request.Builder()
+                .url(SUPABASE_URL + "/rest/v1/users")
+                .addHeader("apikey", SUPABASE_API_KEY)
+                .addHeader("Authorization", "Bearer " + SUPABASE_SERVICE_ROLE_KEY)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
 
-    try (Response response = client.newCall(req).execute()) {
-        return response.body().string();
-    } catch (IOException e) {
-        e.printStackTrace();
-        return "Error: " + e.getMessage();
+        try (Response response = client.newCall(dbRequest).execute()) {
+            if (!response.isSuccessful()) {
+                System.err.println("❌ Insert DB failed: " + response.code() + " - " + response.body().string());
+            } else {
+                System.out.println("✅ Inserted user into DB successfully.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-}
 
+    /**
+     * Đăng ký người dùng thông qua Supabase Auth (không cần confirm email nếu đã tắt)
+     */
+    
+    public String register(RegisterRequest request) {
+        JSONObject payload = new JSONObject();
+        payload.put("email", request.getEmail());
+        payload.put("password", request.getPassword());
+        payload.put("email_confirm", true); // ✅ Quan trọng
 
+        RequestBody body = RequestBody.create(payload.toString(), MediaType.parse("application/json"));
+
+        Request req = new Request.Builder()
+                .url(SUPABASE_URL + "/auth/v1/admin/users")
+                .addHeader("apikey", SUPABASE_API_KEY)
+                .addHeader("Authorization", "Bearer " + SUPABASE_SERVICE_ROLE_KEY)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(req).execute()) {
+            String responseBody = response.body().string();
+
+            if (!response.isSuccessful()) {
+                System.err.println("❌ Admin Create User failed: " + responseBody);
+                return responseBody;
+            }
+
+            JSONObject json = new JSONObject(responseBody);
+            if (!json.has("id")) {
+                return "❗ Không lấy được user ID sau khi tạo.";
+            }
+
+            String userId = json.getString("id");
+
+            // ✅ Lưu user vào DB Supabase
+            insertUserToDatabase(userId, request);
+
+            return "✅ Tạo user thành công!";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "❌ Lỗi: " + e.getMessage();
+        }
+    }
+    
+    /**
+     * Đăng nhập bằng email và password qua Supabase Auth
+     */
     public String login(LoginRequest request) {
-        String json = "{ \"email\": \"" + request.getEmail() + "\",\"password\": \"" + request.getPassword() + "\" }";
+        JSONObject payload = new JSONObject();
+        payload.put("email", request.getEmail());
+        payload.put("password", request.getPassword());
 
-        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+        RequestBody body = RequestBody.create(payload.toString(), MediaType.parse("application/json"));
 
         Request req = new Request.Builder()
                 .url(SUPABASE_URL + "/auth/v1/token?grant_type=password")
@@ -51,10 +114,14 @@ public class AuthService {
                 .build();
 
         try (Response response = client.newCall(req).execute()) {
+            if (response.body() == null) {
+                return "❌ Không có phản hồi từ Supabase.";
+            }
+
             return response.body().string();
         } catch (IOException e) {
             e.printStackTrace();
-            return "Error: " + e.getMessage();
+            return "❌ Lỗi: " + e.getMessage();
         }
     }
 }
