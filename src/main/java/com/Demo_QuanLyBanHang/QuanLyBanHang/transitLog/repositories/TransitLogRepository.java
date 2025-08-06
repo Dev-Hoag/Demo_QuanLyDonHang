@@ -1,6 +1,6 @@
-package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.repositories;
+package com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.repositories;
 
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.TransitLog;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.entities.TransitLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

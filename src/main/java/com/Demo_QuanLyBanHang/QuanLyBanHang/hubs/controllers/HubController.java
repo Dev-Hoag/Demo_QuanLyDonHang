@@ -7,7 +7,6 @@ import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.responses.HubResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.services.HubService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,18 +1,16 @@
-package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.services;
+package com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.services;
 
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.ErrorCode;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.exceptions.AppException;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.TransitLogRequest;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.TransitLogUpdateRequest;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.responses.TransitLogResponse;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.request.TransitLogRequest;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.request.TransitLogUpdateRequest;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.response.TransitLogResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Order;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.TransitLog;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.mappers.TransitLogMapper;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.entities.TransitLog;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.mappers.TransitLogMapper;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.repositories.HubRepository;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.repositories.TransitLogRepository;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.repositories.TransitLogRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

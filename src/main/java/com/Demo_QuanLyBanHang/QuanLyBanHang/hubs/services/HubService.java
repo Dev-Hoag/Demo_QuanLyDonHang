@@ -9,13 +9,10 @@ import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.mappers.HubMapper;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.repositories.HubRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

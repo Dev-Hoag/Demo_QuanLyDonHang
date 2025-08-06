@@ -1,10 +1,10 @@
-package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.controllers;
+package com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.controllers;
 
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.dto.ApiResponse;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.TransitLogRequest;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.TransitLogUpdateRequest;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.responses.TransitLogResponse;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.services.TransitLogService;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.request.TransitLogRequest;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.request.TransitLogUpdateRequest;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.response.TransitLogResponse;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.services.TransitLogService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

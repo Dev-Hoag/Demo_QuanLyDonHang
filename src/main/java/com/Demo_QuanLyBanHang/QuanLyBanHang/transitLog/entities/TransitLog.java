@@ -1,12 +1,10 @@
-package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities;
+package com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.entities;
 
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity

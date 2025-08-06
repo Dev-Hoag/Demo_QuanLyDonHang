@@ -1,4 +1,4 @@
-package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests;
+package com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +12,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TransitLogRequest {
+// Đây là class lịch sử vận chuyển
+public class TransitLogResponse {
+    private UUID transitLogId;
     private Instant transArriveAt;
     private Instant transDepartureAt;
     private String handTo;
-    private UUID orderId;
-    private UUID hubId;
+    private String orderName;
+    private String hubName;
 }
