@@ -1,6 +1,7 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.mappers;
 
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.TransitLogRequest;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.TransitLogUpdateRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.responses.TransitLogResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.TransitLog;
 import org.mapstruct.Mapper;
@@ -17,5 +18,6 @@ public interface TransitLogMapper {
 
 //    @Mapping(target = "orderId", ignore = true)
     @Mapping(target = "hubs", ignore = true)
-    void updateTransitLog(@MappingTarget TransitLog transitLog, TransitLogRequest transitLogRequest);
+    void updateTransitLog(@MappingTarget TransitLog transitLog, TransitLogUpdateRequest transitLogUpdateRequest);
+
 }

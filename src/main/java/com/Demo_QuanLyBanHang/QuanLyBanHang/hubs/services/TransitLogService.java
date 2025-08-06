@@ -3,6 +3,7 @@ package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.services;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.ErrorCode;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.exceptions.AppException;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.TransitLogRequest;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.TransitLogUpdateRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.responses.TransitLogResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Order;
@@ -40,6 +41,7 @@ public class TransitLogService {
             throw new AppException(ErrorCode.INVALID_DEPARTURED);
         }
         TransitLog transitLog = new TransitLog();
+        transitLogMapper.toTransitLog(transitLogRequest);
         transitLog.setHubs(hub);
 //        transitLog.setOrder(order);
         return transitLogMapper.toTransitLogResponse(transitLogRepository.save(transitLog));
@@ -57,10 +59,10 @@ public class TransitLogService {
     }
 
 //    @PreAuthorize("hasRole('ADMIN')")
-    public TransitLogResponse updateTransitLog(UUID id, TransitLogRequest transitLogRequest) {
+    public TransitLogResponse updateTransitLog(UUID id, TransitLogUpdateRequest transitLogUpdateRequest) {
         TransitLog transitLog = transitLogRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.INVALID_ID));
-        transitLogMapper.updateTransitLog(transitLog, transitLogRequest);
+        transitLogMapper.updateTransitLog(transitLog, transitLogUpdateRequest);
         return transitLogMapper.toTransitLogResponse(transitLogRepository.save(transitLog));
     }
 

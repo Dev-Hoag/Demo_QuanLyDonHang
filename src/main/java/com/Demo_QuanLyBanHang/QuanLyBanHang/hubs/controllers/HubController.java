@@ -6,6 +6,7 @@ import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.HubUpdateRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.responses.HubResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.services.HubService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,21 +16,22 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/hubs")
+@RequiredArgsConstructor
 public class HubController {
-    private HubService hubService;
+    private final HubService hubService;
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<HubResponse>> createHub(@RequestBody @Valid HubRequest hubRequest) {
         HubResponse result = hubService.createHub(hubRequest);
         var response = ApiResponse.<HubResponse>builder()
                 .statusCode(201)
-                .message("Hub Created")
+                .message("Tạo trạm thành công")
                 .data(result)
                 .build();
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<ApiResponse<List<HubResponse>>> getHubs() {
         List<HubResponse> hubs = hubService.getAllHubs();
 
