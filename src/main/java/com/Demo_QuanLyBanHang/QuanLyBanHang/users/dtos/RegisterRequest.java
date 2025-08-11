@@ -5,6 +5,8 @@ public class RegisterRequest {
     private String password;
     private String phone;
     private String name;
+    private String role;
+
 
     // Constructors
     public RegisterRequest() {}
@@ -13,6 +15,7 @@ public class RegisterRequest {
         this.password = password;
         this.phone = phone;
         this.name = name;
+        this.role = role;
     }
 
     // Getters and Setters
@@ -43,5 +46,11 @@ public class RegisterRequest {
     }
     public void setName(String name) {
         this.name = name;
+    }
+      public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 }
