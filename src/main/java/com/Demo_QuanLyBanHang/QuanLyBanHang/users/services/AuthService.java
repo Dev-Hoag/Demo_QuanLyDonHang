@@ -23,8 +23,7 @@ public class AuthService {
     json.put("email", request.getEmail());
     json.put("phone", request.getPhone());
     json.put("name", request.getName());
-
-    // Nếu request có role thì dùng, không thì mặc định user
+    json.put("password", request.getPassword()); 
     String role = (request.getRole() != null && !request.getRole().isEmpty())
             ? request.getRole()
             : "user";
