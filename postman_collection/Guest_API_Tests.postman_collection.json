@@ -1,0 +1,380 @@
+{
+	"info": {
+		"_postman_id": "guest-api-collection",
+		"name": "Guest API Tests",
+		"description": "Bộ test API cho module Guest - Quản lý khách hàng",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest"]
+				}
+			}
+		},
+		{
+			"name": "2. Tạo khách hàng mới (SENDER)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"Nguyễn Văn Test 01\",\n  \"phoneNumber\": \"0345678901\",\n  \"email\": \"test01@gmail.com\",\n  \"address\": \"123 Test Street, Quận 1, TP.HCM\",\n  \"guestType\": \"SENDER\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/guest",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest"]
+				}
+			}
+		},
+		{
+			"name": "3. Tạo khách hàng mới (RECEIVER)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"Trần Thị Test 02\",\n  \"phoneNumber\": \"0345678902\",\n  \"email\": \"test02@gmail.com\",\n  \"address\": \"456 Test Street, Quận 3, TP.HCM\",\n  \"guestType\": \"RECEIVER\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/guest",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest"]
+				}
+			}
+		},
+		{
+			"name": "4. Lấy thông tin khách hàng theo ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/1",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "1"]
+				}
+			}
+		},
+		{
+			"name": "5. Lấy thông tin khách hàng theo số điện thoại",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/phone/0987654321",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "phone", "0987654321"]
+				}
+			}
+		},
+		{
+			"name": "6. Cập nhật thông tin khách hàng",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"Nguyễn Văn An (Đã cập nhật)\",\n  \"phoneNumber\": \"0987654321\",\n  \"email\": \"nguyenvanan.updated@gmail.com\",\n  \"address\": \"123 Đường Lê Lợi, Quận 1, TP.HCM (Đã cập nhật)\",\n  \"guestType\": \"SENDER\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/guest/1",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "1"]
+				}
+			}
+		},
+		{
+			"name": "7. Tìm kiếm khách hàng theo tên",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/search?fullName=Nguyễn",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "search"],
+					"query": [
+						{
+							"key": "fullName",
+							"value": "Nguyễn"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "8. Tìm kiếm khách hàng theo số điện thoại",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/search?phoneNumber=098",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "search"],
+					"query": [
+						{
+							"key": "phoneNumber",
+							"value": "098"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "9. Lấy tất cả khách hàng SENDER",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/type/SENDER",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "type", "SENDER"]
+				}
+			}
+		},
+		{
+			"name": "10. Lấy tất cả khách hàng RECEIVER",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/type/RECEIVER",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "type", "RECEIVER"]
+				}
+			}
+		},
+		{
+			"name": "11. Kiểm tra số điện thoại tồn tại",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/check/0987654321",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "check", "0987654321"]
+				}
+			}
+		},
+		{
+			"name": "12. Kiểm tra số điện thoại không tồn tại",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/check/0000000000",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "check", "0000000000"]
+				}
+			}
+		},
+		{
+			"name": "13. Tìm khách hàng theo số điện thoại (không throw exception)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/find/0987654321",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "find", "0987654321"]
+				}
+			}
+		},
+		{
+			"name": "14. Tra cứu đơn hàng theo số điện thoại",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/orders?phone=0987654321",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "orders"],
+					"query": [
+						{
+							"key": "phone",
+							"value": "0987654321"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "15. Test duplicate số điện thoại",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"Test Duplicate Phone\",\n  \"phoneNumber\": \"0987654321\",\n  \"email\": \"duplicate@gmail.com\",\n  \"address\": \"789 Duplicate Street, TP.HCM\",\n  \"guestType\": \"SENDER\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/guest",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest"]
+				}
+			}
+		},
+		{
+			"name": "16. Test duplicate email",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"Test Duplicate Email\",\n  \"phoneNumber\": \"0345678903\",\n  \"email\": \"nguyenvanan@gmail.com\",\n  \"address\": \"999 Duplicate Street, TP.HCM\",\n  \"guestType\": \"RECEIVER\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/guest",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest"]
+				}
+			}
+		},
+		{
+			"name": "17. Test validation - số điện thoại không hợp lệ",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"Test Invalid Phone\",\n  \"phoneNumber\": \"0123456789\",\n  \"email\": \"invalid@gmail.com\",\n  \"address\": \"123 Invalid Street, TP.HCM\",\n  \"guestType\": \"SENDER\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/guest",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest"]
+				}
+			}
+		},
+		{
+			"name": "18. Test validation - email không hợp lệ",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"Test Invalid Email\",\n  \"phoneNumber\": \"0345678904\",\n  \"email\": \"invalid-email\",\n  \"address\": \"456 Invalid Street, TP.HCM\",\n  \"guestType\": \"RECEIVER\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/guest",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest"]
+				}
+			}
+		},
+		{
+			"name": "19. Test validation - tên rỗng",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"\",\n  \"phoneNumber\": \"0345678905\",\n  \"email\": \"empty@gmail.com\",\n  \"address\": \"789 Empty Street, TP.HCM\",\n  \"guestType\": \"SENDER\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/guest",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest"]
+				}
+			}
+		},
+		{
+			"name": "20. Xóa khách hàng (soft delete)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/api/guest/1",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": ["api", "guest", "1"]
+				}
+			}
+		}
+	]
+} 
