@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     INVALID_REQUEST(HttpStatus.BAD_REQUEST.value(), "Yêu cầu không hợp lệ"),
-    HUBNAME_EXISTED(HttpStatus.BAD_REQUEST.value(), "Tên trạm giao nhận đã tồn tại"),
     HUBADDRESS_EXISTED(HttpStatus.BAD_REQUEST.value(), "Địa chỉ trạm giao nhận đã tồn tại"),
     INVALID_TRANSIT_ARRIVED_OR_DEPARTURED(HttpStatus.BAD_REQUEST.value(), "Thời gian không được để trống"),
     INVALID_DEPARTURED(HttpStatus.BAD_REQUEST.value(), "Thời gian rời trạm phải sau hoặc bằng thời gian đến trạm"),

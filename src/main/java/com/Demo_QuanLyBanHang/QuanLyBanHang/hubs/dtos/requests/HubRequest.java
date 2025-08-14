@@ -13,5 +13,4 @@ public class HubRequest {
     private String hubName;
     private String hubAddress;
     private String hubRegion;
-    private String hubNote;
 }

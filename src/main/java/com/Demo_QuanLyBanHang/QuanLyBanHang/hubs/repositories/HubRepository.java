@@ -11,6 +11,7 @@ import java.util.UUID;
 @Repository
 public interface HubRepository extends JpaRepository<Hub, UUID> {
     boolean existsByHubName(String hubName);
+    boolean existsByHubAddress(String hubAddress);
     Optional<Hub> findByHubName(String hubName);
     Optional<Hub> findByHubAddress(String hubAddress);
     List<Hub> findByHubNameContainingIgnoreCaseAndHubAddressContainingIgnoreCase(String hubName, String hubAddress);

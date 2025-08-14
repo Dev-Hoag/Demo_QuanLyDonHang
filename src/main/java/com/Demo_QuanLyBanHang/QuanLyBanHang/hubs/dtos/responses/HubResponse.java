@@ -16,5 +16,4 @@ public class HubResponse {
     private String hubName;
     private String hubAddress;
     private String hubRegion;
-    private String hubNote;
 }

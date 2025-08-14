@@ -17,15 +17,12 @@ public class Hub {
     @Column(unique = true, nullable = false)
     private UUID hubId;
 
-    @Column(nullable = false, unique = true, length = 255)
+    @Column(nullable = false, unique = false, length = 255)
     private String hubName;
 
-    @Column(nullable = false, unique = false, length = 255)
+    @Column(nullable = false, unique = true, length = 255)
     private String hubAddress;
 
     @Column(nullable = false, length = 50)
     private String hubRegion;
-
-    @Column(length = 50)
-    private String hubNote;
 }

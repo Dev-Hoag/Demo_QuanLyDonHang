@@ -1,6 +1,7 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.entities;
 
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.entities.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,8 +29,8 @@ public class TransitLog {
     @Column(nullable = false, length = 50)
     private String handTo; // Thông tin về người hoặc bộ phận tiếp nhận đơn hàng khi nó rời khỏi kho. Ví dụ: Hàng rời Hub A, được giao cho shipper Nguyễn Văn B: handed_to = "Nguyễn Văn B"
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Order orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Order orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Hub hubs;

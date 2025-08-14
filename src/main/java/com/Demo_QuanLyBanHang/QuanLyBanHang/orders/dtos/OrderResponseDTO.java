@@ -3,6 +3,8 @@ package com.Demo_QuanLyBanHang.QuanLyBanHang.orders.dtos;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.entities.OrderStatus;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.entities.AreaType;
 
+import java.util.UUID;
+
 public class OrderResponseDTO {
     private Long id;
     private String customerName;

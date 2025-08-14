@@ -23,14 +23,13 @@ public class HubService {
 //    @PreAuthorize("hasRole('ADMIN')")
     public HubResponse createHub(HubRequest hubRequest) {
 
-        String hubName = hubRequest.getHubName();
+        String hubAddress = hubRequest.getHubAddress();
 
-        if(hubRepository.existsByHubName(hubName)) {
-            throw new AppException(ErrorCode.HUBNAME_EXISTED);
+        if(hubRepository.existsByHubAddress(hubAddress)) {
+            throw new AppException(ErrorCode.HUBADDRESS_EXISTED);
         }
 
-        Hub hub = new Hub();
-        hubMapper.toHub(hubRequest);
+        Hub hub = hubMapper.toHub(hubRequest);
         return hubMapper.toHubResponse(hubRepository.save(hub));
     }
 
