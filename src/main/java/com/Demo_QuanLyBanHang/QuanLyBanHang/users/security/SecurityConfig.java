@@ -27,6 +27,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())  // Tắt CSRF theo cách mới
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/guest/**").permitAll()  // Cho phép API Guest không cần xác thực
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/employee/**").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers("/user/**").hasAnyRole("ADMIN", "EMPLOYEE", "USER")

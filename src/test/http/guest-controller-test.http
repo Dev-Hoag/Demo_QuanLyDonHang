@@ -1,0 +1,319 @@
+### ========================================
+### TEST ĐẦY ĐỦ GUEST CONTROLLER
+### ========================================
+
+### 1. POST /api/guest - Tạo khách hàng mới
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Nguyễn Văn Test 1",
+  "phoneNumber": "0398657717",
+  "email": "test1@gmail.com",
+  "address": "123 Test Street 1, Test City",
+  "guestType": "SENDER"
+}
+
+###
+
+### 2. POST /api/guest - Tạo khách hàng RECEIVER
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Trần Thị Test 2",
+  "phoneNumber": "0357893555",
+  "email": "test2@gmail.com",
+  "address": "456 Test Street 2, Test City",
+  "guestType": "RECEIVER"
+}
+
+###
+
+### 3. POST /api/guest - Tạo khách hàng không có email
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Lê Văn Test 3",
+  "phoneNumber": "0845769904",
+  "address": "789 Test Street 3, Test City",
+  "guestType": "SENDER"
+}
+
+###
+
+### 4. GET /api/guest - Lấy tất cả khách hàng
+GET http://localhost:9000/api/guest
+Content-Type: application/json
+
+###
+
+### 5. GET /api/guest/{id} - Lấy khách hàng theo ID (thay {id} bằng ID thực)
+GET http://localhost:9000/api/guest/1
+Content-Type: application/json
+
+###
+
+### 6. GET /api/guest/phone/{phoneNumber} - Lấy khách hàng theo số điện thoại
+GET http://localhost:9000/api/guest/phone/0887654321
+Content-Type: application/json
+
+###
+
+### 7. GET /api/guest/search - Tìm kiếm theo tên
+GET http://localhost:9000/api/guest/search?fullName=Nguyễn
+Content-Type: application/json
+
+###
+
+### 8. GET /api/guest/search - Tìm kiếm theo số điện thoại
+GET http://localhost:9000/api/guest/search?phoneNumber=0832109876
+Content-Type: application/json
+
+###
+
+### 9. GET /api/guest/search - Tìm kiếm theo email
+GET http://localhost:9000/api/guest/search?email=test
+Content-Type: application/json
+
+###
+
+### 10. GET /api/guest/search - Tìm kiếm theo địa chỉ
+GET http://localhost:9000/api/guest/search?address=Test
+Content-Type: application/json
+
+###
+
+### 11. GET /api/guest/search - Tìm kiếm tổng hợp
+GET http://localhost:9000/api/guest/search?fullName=Test&guestType=SENDER
+Content-Type: application/json
+
+###
+
+### 12. GET /api/guest/type/SENDER - Lấy khách hàng theo loại SENDER
+GET http://localhost:9000/api/guest/type/SENDER
+Content-Type: application/json
+
+###
+
+### 13. GET /api/guest/type/RECEIVER - Lấy khách hàng theo loại RECEIVER
+GET http://localhost:9000/api/guest/type/RECEIVER
+Content-Type: application/json
+
+###
+
+### 14. GET /api/guest/check/{phoneNumber} - Kiểm tra số điện thoại đã tồn tại
+GET http://localhost:9000/api/guest/check/0954321098
+Content-Type: application/json
+
+###
+
+### 15. GET /api/guest/check/{phoneNumber} - Kiểm tra số điện thoại chưa tồn tại
+GET http://localhost:9000/api/guest/check/9999999999
+Content-Type: application/json
+
+###
+
+### 16. GET /api/guest/find/{phoneNumber} - Tìm khách hàng theo số điện thoại (không throw exception)
+GET http://localhost:9000/api/guest/find/0876543210
+Content-Type: application/json
+
+###
+
+### 17. GET /api/guest/find/{phoneNumber} - Tìm khách hàng không tồn tại
+GET http://localhost:9000/api/guest/find/9999999999
+Content-Type: application/json
+
+###
+
+### 18. GET /api/guest/orders - Tra cứu đơn hàng theo số điện thoại
+GET http://localhost:9000/api/guest/orders?phone=0910987654
+Content-Type: application/json
+
+###
+
+### 19. PUT /api/guest/{id} - Cập nhật khách hàng (thay {id} bằng ID thực)
+PUT http://localhost:9000/api/guest/21
+Content-Type: application/json
+
+{
+  "fullName": "Nguyễn Văn Test 1 Updated",
+  "phoneNumber": "0844888444",
+  "email": "test1.updated@gmail.com",
+  "address": "123 Updated Street, Test City",
+  "guestType": "SENDER"
+}
+
+###
+
+### 20. PUT /api/guest/{id} - Cập nhật khách hàng với số điện thoại mới
+PUT http://localhost:9000/api/guest/22
+Content-Type: application/json
+
+{
+  "fullName": "Trần Thị Test 2 Updated",
+  "phoneNumber": "0399666777",
+  "email": "test2.updated@gmail.com",
+  "address": "456 Updated Street, Test City",
+  "guestType": "RECEIVER"
+}
+
+###
+
+### 21. DELETE /api/guest/{id} - Xóa khách hàng (thay {id} bằng ID thực)
+DELETE http://localhost:9000/api/guest/3
+Content-Type: application/json
+
+###
+
+### ========================================
+### TEST VALIDATION ERRORS
+### ========================================
+
+### 22. POST - Validation: Họ tên quá ngắn
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "A",
+  "phoneNumber": "0333876321",
+  "email": "test5@gmail.com",
+  "address": "123 Test Street",
+  "guestType": "SENDER"
+}
+
+###
+
+### 23. POST - Validation: Số điện thoại sai format
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Test User",
+  "phoneNumber": "123",
+  "email": "test6@gmail.com",
+  "address": "123 Test Street",
+  "guestType": "SENDER"
+}
+
+###
+
+### 24. POST - Validation: Email sai format
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Test User",
+  "phoneNumber": "0123456786",
+  "email": "invalid-email",
+  "address": "123 Test Street",
+  "guestType": "SENDER"
+}
+
+###
+
+### 25. POST - Validation: Địa chỉ quá ngắn
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Test User",
+  "phoneNumber": "0123456787",
+  "email": "test7@gmail.com",
+  "address": "Short",
+  "guestType": "SENDER"
+}
+
+###
+
+### 26. POST - Validation: Thiếu loại khách hàng
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Test User",
+  "phoneNumber": "0855666777",
+  "email": "test8@gmail.com",
+  "address": "123 Test Street"
+}
+
+###
+
+### 27. POST - Validation: Số điện thoại đã tồn tại
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Test User Duplicate 1",
+  "phoneNumber": "0854321098",
+  "email": "duplicate1@gmail.com",
+  "address": "123A Test Street",
+  "guestType": "SENDER"
+}
+
+###
+
+### 28. POST - Validation: Email đã tồn tại
+POST http://localhost:9000/api/guest
+Content-Type: application/json
+
+{
+  "fullName": "Test User Email Duplicate",
+  "phoneNumber": "0123456789",
+  "email": "test1@gmail.com",
+  "address": "123 Test Street",
+  "guestType": "SENDER"
+}
+
+###
+
+### ========================================
+### TEST NOT FOUND ERRORS
+### ========================================
+
+### 29. GET - Not Found: ID không tồn tại
+GET http://localhost:9000/api/guest/999
+Content-Type: application/json
+
+###
+
+### 30. GET - Not Found: Số điện thoại không tồn tại
+GET http://localhost:9000/api/guest/phone/9999999999
+Content-Type: application/json
+
+###
+
+### 31. PUT - Not Found: Cập nhật ID không tồn tại
+PUT http://localhost:9000/api/guest/999
+Content-Type: application/json
+
+{
+  "fullName": "Test User",
+  "phoneNumber": "0323456790",
+  "email": "test90@gmail.com",
+  "address": "123 Test Street",
+  "guestType": "SENDER"
+}
+
+###
+
+### 32. DELETE - Not Found: Xóa ID không tồn tại
+DELETE http://localhost:9000/api/guest/999
+Content-Type: application/json
+
+###
+
+### ========================================
+### TEST FINAL VERIFICATION
+### ========================================
+
+### 33. GET - Kiểm tra danh sách cuối cùng
+GET http://localhost:9000/api/guest
+Content-Type: application/json
+
+###
+
+### 34. GET - Kiểm tra khách hàng đã bị xóa
+GET http://localhost:9000/api/guest/3
+Content-Type: application/json 

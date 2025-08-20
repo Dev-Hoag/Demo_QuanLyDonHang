@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Khách hàng - Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏢 Hệ thống Quản lý Khách hàng</h1>
+            <p>Module Guest - Demo Spring Boot + HTML/CSS</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="showTab('create')">➕ Tạo khách hàng</button>
+            <button class="tab-btn" onclick="showTab('search')">🔍 Tìm kiếm</button>
+            <button class="tab-btn" onclick="showTab('list')">📋 Danh sách</button>
+            <button class="tab-btn" onclick="showTab('orders')">📦 Tra cứu đơn hàng</button>
+        </nav>
+
+        <!-- Tab Tạo khách hàng -->
+        <div id="create" class="tab-content active">
+            <h2>Thêm khách hàng mới</h2>
+            <form id="createForm" class="form">
+                <div class="form-group">
+                    <label for="fullName">Họ tên *</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phoneNumber">Số điện thoại *</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Địa chỉ *</label>
+                    <textarea id="address" name="address" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="guestType">Loại khách hàng *</label>
+                    <select id="guestType" name="guestType" required>
+                        <option value="">Chọn loại</option>
+                        <option value="SENDER">Người gửi</option>
+                        <option value="RECEIVER">Người nhận</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Tạo khách hàng</button>
+            </form>
+        </div>
+
+        <!-- Tab Tìm kiếm -->
+        <div id="search" class="tab-content">
+            <h2>Tìm kiếm khách hàng</h2>
+            <form id="searchForm" class="form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchName">Họ tên</label>
+                        <input type="text" id="searchName" name="fullName">
+                    </div>
+                    <div class="form-group">
+                        <label for="searchPhone">Số điện thoại</label>
+                        <input type="tel" id="searchPhone" name="phoneNumber">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchEmail">Email</label>
+                        <input type="email" id="searchEmail" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="searchAddress">Địa chỉ</label>
+                        <input type="text" id="searchAddress" name="address">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </form>
+            <div id="searchResults" class="results"></div>
+        </div>
+
+        <!-- Tab Danh sách -->
+        <div id="list" class="tab-content">
+            <h2>Danh sách khách hàng</h2>
+            <div class="filters">
+                <button class="btn btn-secondary" onclick="loadGuests('all')">Tất cả</button>
+                <button class="btn btn-secondary" onclick="loadGuests('SENDER')">Người gửi</button>
+                <button class="btn btn-secondary" onclick="loadGuests('RECEIVER')">Người nhận</button>
+            </div>
+            <div id="guestList" class="results"></div>
+        </div>
+
+        <!-- Tab Tra cứu đơn hàng -->
+        <div id="orders" class="tab-content">
+            <h2>Tra cứu đơn hàng</h2>
+            <form id="orderSearchForm" class="form">
+                <div class="form-group">
+                    <label for="orderPhone">Số điện thoại khách hàng *</label>
+                    <input type="tel" id="orderPhone" name="phone" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Tra cứu</button>
+            </form>
+            <div id="orderResults" class="results"></div>
+        </div>
+    </div>
+
+    <!-- Modal cho thông báo -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalMessage"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
