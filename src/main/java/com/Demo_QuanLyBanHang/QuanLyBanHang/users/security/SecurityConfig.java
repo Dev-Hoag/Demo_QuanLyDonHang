@@ -2,6 +2,7 @@ package com.Demo_QuanLyBanHang.QuanLyBanHang.users.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
+    private static final String[] PUBLIC_ENDPOINT ={"/transLog", "/transLog/{transId}", "/orders", "/orders/{id}"};
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -27,6 +30,9 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/employee/**").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers("/user/**").hasAnyRole("ADMIN", "EMPLOYEE", "USER")
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINT).hasAnyRole("ADMIN", "EMPLOYEE", "USER")
+                .requestMatchers("/orders/create").hasAnyRole("ADMIN", "EMPLOYEE", "USER")
+                .requestMatchers("hubs/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface TransitLogMapper {
-//    @Mapping(target = "orderId", ignore = true)
+    @Mapping(target = "orderId", ignore = true)
     @Mapping(target = "hubs", ignore = true)
     TransitLog toTransitLog(TransitLogRequest transitLogRequest);
 

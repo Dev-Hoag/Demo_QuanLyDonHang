@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -18,7 +19,12 @@ public class OrderService {
 
     public OrderResponseDTO createOrder(OrderRequestDTO dto) {
         Order order = new Order();
-        order.setCustomerName(dto.getCustomerName());
+        order.setOderName(dto.getOderName());
+        order.setSenderName(dto.getSenderName());
+        order.setReceiverName(dto.getReceiverName());
+        order.setSenderNumber(dto.getSenderNumber());
+        order.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
+        order.setWeight(dto.getWeight());
         order.setAddress(dto.getAddress());
         order.setAreaType(dto.getAreaType());
         order.setStatus(OrderStatus.CREATED);
@@ -29,24 +35,24 @@ public class OrderService {
         return orderRepository.findAll().stream().map(this::toResponseDTO).toList();
     }
 
-    public Optional<OrderResponseDTO> getOrderById(Long id) {
+    public Optional<OrderResponseDTO> getOrderById(UUID id) {
         return orderRepository.findById(id).map(this::toResponseDTO);
     }
 
-    public OrderResponseDTO updateOrder(Long id, OrderRequestDTO dto) {
+    public OrderResponseDTO updateOrder(UUID id, OrderRequestDTO dto) {
         return orderRepository.findById(id).map(order -> {
-            order.setCustomerName(dto.getCustomerName());
+            order.setReceiverPhoneNumber( dto.getReceiverPhoneNumber());
+            order.setReceiverName(dto.getReceiverName());
             order.setAddress(dto.getAddress());
-            order.setAreaType(dto.getAreaType());
             return toResponseDTO(orderRepository.save(order));
         }).orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
-    public void deleteOrder(Long id) {
+    public void deleteOrder(UUID id) {
         orderRepository.deleteById(id);
     }
 
-    public OrderResponseDTO updateStatus(Long id, OrderStatus status) {
+    public OrderResponseDTO updateStatus(UUID id, OrderStatus status) {
         return orderRepository.findById(id).map(order -> {
             order.setStatus(status);
             return toResponseDTO(orderRepository.save(order));
@@ -56,7 +62,12 @@ public class OrderService {
     private OrderResponseDTO toResponseDTO(Order order) {
         OrderResponseDTO dto = new OrderResponseDTO();
         dto.setId(order.getId());
-        dto.setCustomerName(order.getCustomerName());
+        dto.setOderName(order.getOderName());
+        dto.setSenderName(order.getSenderName());
+        dto.setReceiverName(order.getReceiverName());
+        dto.setSenderNumber(order.getSenderNumber());
+        dto.setReceiverPhoneNumber(order.getReceiverPhoneNumber());
+        dto.setWeight(order.getWeight());
         dto.setAddress(order.getAddress());
         dto.setStatus(order.getStatus());
         dto.setAreaType(order.getAreaType());
