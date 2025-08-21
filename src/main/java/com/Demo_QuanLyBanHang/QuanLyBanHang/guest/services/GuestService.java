@@ -1,5 +1,7 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.guest.services;
 
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.ErrorCode;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.exceptions.AppException;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.guest.dtos.GuestCreateDto;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.guest.dtos.GuestResponseDto;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.guest.dtos.GuestSearchDto;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,7 +24,11 @@ public class GuestService {
     private final GuestRepository guestRepository;
     
     // Tạo mới khách hàng
-    public GuestResponseDto createGuest(GuestCreateDto createDto) {
+    public GuestResponseDto createGuest(UUID userId, GuestCreateDto createDto) {
+
+        if (guestRepository.existsByUserId(userId)) {
+            throw new RuntimeException("Tài khoản này đã được liên kết với một khách hàng.");
+        }
         // Kiểm tra số điện thoại đã tồn tại chưa
         if (guestRepository.existsByPhoneNumber(createDto.getPhoneNumber())) {
             throw new RuntimeException("Số điện thoại đã tồn tại trong hệ thống");
@@ -37,6 +44,7 @@ public class GuestService {
         
         // Tạo entity mới
         Guest guest = new Guest();
+        guest.setUserId(userId);
         guest.setFullName(createDto.getFullName().trim());
         guest.setPhoneNumber(createDto.getPhoneNumber().trim());
         guest.setEmail(createDto.getEmail() != null ? createDto.getEmail().trim() : null);
@@ -50,9 +58,17 @@ public class GuestService {
     
     // Lấy thông tin khách hàng theo ID
     @Transactional(readOnly = true)
-    public GuestResponseDto getGuestById(Long id) {
+    public GuestResponseDto getGuestById(UUID id) {
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng với ID: " + id));
+        return GuestResponseDto.fromEntity(guest);
+    }
+
+    // Lấy thông tin khách hàng theo userId
+    public GuestResponseDto getGuestByUserId(UUID userId) {
+
+        Guest guest = guestRepository.findByUserId(userId).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy khách hàng cho userId: " + userId));
         return GuestResponseDto.fromEntity(guest);
     }
     
@@ -65,7 +81,7 @@ public class GuestService {
     }
     
     // Cập nhật thông tin khách hàng
-    public GuestResponseDto updateGuest(Long id, GuestCreateDto updateDto) {
+    public GuestResponseDto updateGuest(UUID id, GuestCreateDto updateDto) {
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng với ID: " + id));
         
@@ -87,7 +103,7 @@ public class GuestService {
     }
     
     // Xóa khách hàng (soft delete)
-    public void deleteGuest(Long id) {
+    public void deleteGuest(UUID id) {
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng với ID: " + id));
         guest.setIsActive(false);

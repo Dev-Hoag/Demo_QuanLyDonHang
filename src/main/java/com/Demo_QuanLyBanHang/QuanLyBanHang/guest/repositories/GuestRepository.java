@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface GuestRepository extends JpaRepository<Guest, Long> {
+public interface GuestRepository extends JpaRepository<Guest, UUID> {
     
     // Tìm theo số điện thoại
     Optional<Guest> findByPhoneNumber(String phoneNumber);
@@ -46,4 +47,8 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
     
     // Tìm tất cả khách hàng đang active
     List<Guest> findByIsActiveTrue();
+
+    boolean existsByUserId(UUID userId);
+
+    Optional<Guest> findByUserId(UUID userId);
 } 

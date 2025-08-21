@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class GuestResponseDto {
     
-    private Long id;
+    private UUID id;
     private String fullName;
     private String phoneNumber;
     private String email;
@@ -21,6 +22,7 @@ public class GuestResponseDto {
     private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private UUID userId;
     
     public static GuestResponseDto fromEntity(Guest guest) {
         return new GuestResponseDto(
@@ -32,7 +34,8 @@ public class GuestResponseDto {
             guest.getGuestType(),
             guest.getIsActive(),
             guest.getCreatedAt(),
-            guest.getUpdatedAt()
+            guest.getUpdatedAt(),
+            guest.getUserId()
         );
     }
 } 

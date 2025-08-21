@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/guest")
@@ -36,7 +37,7 @@ public class GuestController {
     
     // GET /api/guest/{id} - Lấy thông tin khách hàng theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<GuestResponseDto> getGuestById(@PathVariable Long id) {
+    public ResponseEntity<GuestResponseDto> getGuestById(@PathVariable UUID id) {
         try {
             GuestResponseDto response = guestService.getGuestById(id);
             return ResponseEntity.ok(response);
@@ -58,7 +59,7 @@ public class GuestController {
     
     // PUT /api/guest/{id} - Cập nhật thông tin khách hàng
     @PutMapping("/{id}")
-    public ResponseEntity<GuestResponseDto> updateGuest(@PathVariable Long id, 
+    public ResponseEntity<GuestResponseDto> updateGuest(@PathVariable UUID id,
                                                        @Valid @RequestBody GuestCreateDto updateDto) {
         try {
             GuestResponseDto response = guestService.updateGuest(id, updateDto);
@@ -70,7 +71,7 @@ public class GuestController {
     
     // DELETE /api/guest/{id} - Xóa khách hàng (soft delete)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGuest(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteGuest(@PathVariable UUID id) {
         try {
             guestService.deleteGuest(id);
             return ResponseEntity.noContent().build();
