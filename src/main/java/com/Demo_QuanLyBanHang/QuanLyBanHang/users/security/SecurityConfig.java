@@ -29,7 +29,8 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/guest/**").permitAll()  // Cho phép API Guest không cần xác thực
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/employee/**").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers("/employees/**").permitAll()
+
                 .requestMatchers("/user/**").hasAnyRole("ADMIN", "EMPLOYEE", "USER")
                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINT).hasAnyRole("ADMIN", "EMPLOYEE", "USER")
                 .requestMatchers("/orders/create").hasAnyRole("ADMIN", "EMPLOYEE", "USER")
