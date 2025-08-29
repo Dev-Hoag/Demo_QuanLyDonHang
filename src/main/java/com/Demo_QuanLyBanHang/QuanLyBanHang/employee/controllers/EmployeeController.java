@@ -47,18 +47,6 @@ public class EmployeeController {
         }
     }
 
-    // GET /api/employees/phone/{phoneNumber}
-    @GetMapping("/phone/{phoneNumber}")
-    public ResponseEntity<?> getEmployeeByPhoneNumber(@PathVariable String phoneNumber) {
-        try {
-            EmployeeResponseDto response = employeeService.getEmployeeByPhoneNumber(phoneNumber);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", e.getMessage()));
-        }
-    }
-
     // PUT /api/employees/{id}
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEmployee(
@@ -103,21 +91,5 @@ public class EmployeeController {
         EmployeeSearchDto searchDto = new EmployeeSearchDto(fullName, phoneNumber, email, gender);
         List<EmployeeResponseDto> employees = employeeService.searchEmployees(searchDto);
         return ResponseEntity.ok(employees);
-    }
-
-    // GET /api/employees/check/{phoneNumber}
-    @GetMapping("/check/{phoneNumber}")
-    public ResponseEntity<Boolean> checkPhoneNumberExists(@PathVariable String phoneNumber) {
-        boolean exists = employeeService.existsByPhoneNumber(phoneNumber);
-        return ResponseEntity.ok(exists);
-    }
-
-    // GET /api/employees/find/{phoneNumber}
-    @GetMapping("/find/{phoneNumber}")
-    public ResponseEntity<?> findEmployeeByPhoneNumber(@PathVariable String phoneNumber) {
-        Optional<EmployeeResponseDto> employee = employeeService.findEmployeeByPhoneNumber(phoneNumber);
-        return employee.<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Không tìm thấy nhân viên với số điện thoại: " + phoneNumber)));
     }
 }

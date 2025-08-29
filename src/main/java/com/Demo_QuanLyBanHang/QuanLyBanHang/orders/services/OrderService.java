@@ -1,10 +1,17 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.orders.services;
 
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.ErrorCode;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.exceptions.AppException;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.utils.AuthUtil;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.entities.Order;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.entities.OrderStatus;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.mappers.OrderMapper;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.repositories.OrderRepository;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.dtos.OrderRequestDTO;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.dtos.OrderResponseDTO;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities.User;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.users.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,39 +20,45 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
-    @Autowired
-    private OrderRepository orderRepository;
+
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final OrderMapper orderMapper;
 
     public OrderResponseDTO createOrder(OrderRequestDTO dto) {
-        Order order = new Order();
-        order.setOderName(dto.getOderName());
-        order.setSenderName(dto.getSenderName());
-        order.setReceiverName(dto.getReceiverName());
-        order.setSenderNumber(dto.getSenderNumber());
-        order.setReceiverPhoneNumber(dto.getReceiverPhoneNumber());
-        order.setWeight(dto.getWeight());
-        order.setAddress(dto.getAddress());
-        order.setAreaType(dto.getAreaType());
+
+        UUID userId = AuthUtil.getUserIdFromContext();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Order order = orderMapper.toOrder(dto);
+        order.setUser(user);
         order.setStatus(OrderStatus.CREATED);
-        return toResponseDTO(orderRepository.save(order));
+        Order result = orderRepository.save(order);
+        return orderMapper.toOrderResponseDTO(result);
     }
 
     public List<OrderResponseDTO> getAllOrders() {
-        return orderRepository.findAll().stream().map(this::toResponseDTO).toList();
+        return orderRepository.findAll()
+                .stream()
+                .map(order -> orderMapper.toOrderResponseDTO(order)).toList();
     }
 
-    public Optional<OrderResponseDTO> getOrderById(UUID id) {
-        return orderRepository.findById(id).map(this::toResponseDTO);
+    public Optional<OrderResponseDTO> getOrderById(UUID orderId) {
+        return orderRepository.findById(orderId)
+                .map(order ->  orderMapper.toOrderResponseDTO(order));
     }
 
     public OrderResponseDTO updateOrder(UUID id, OrderRequestDTO dto) {
-        return orderRepository.findById(id).map(order -> {
-            order.setReceiverPhoneNumber( dto.getReceiverPhoneNumber());
-            order.setReceiverName(dto.getReceiverName());
-            order.setAddress(dto.getAddress());
-            return toResponseDTO(orderRepository.save(order));
-        }).orElseThrow(() -> new RuntimeException("Order not found"));
+        Order order =  orderRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+
+        orderMapper.updateOrder(order, dto);
+
+        return orderMapper.toOrderResponseDTO(order);
     }
 
     public void deleteOrder(UUID id) {
@@ -53,24 +66,12 @@ public class OrderService {
     }
 
     public OrderResponseDTO updateStatus(UUID id, OrderStatus status) {
-        return orderRepository.findById(id).map(order -> {
-            order.setStatus(status);
-            return toResponseDTO(orderRepository.save(order));
-        }).orElseThrow(() -> new RuntimeException("Order not found"));
-    }
 
-    private OrderResponseDTO toResponseDTO(Order order) {
-        OrderResponseDTO dto = new OrderResponseDTO();
-        dto.setId(order.getId());
-        dto.setOderName(order.getOderName());
-        dto.setSenderName(order.getSenderName());
-        dto.setReceiverName(order.getReceiverName());
-        dto.setSenderNumber(order.getSenderNumber());
-        dto.setReceiverPhoneNumber(order.getReceiverPhoneNumber());
-        dto.setWeight(order.getWeight());
-        dto.setAddress(order.getAddress());
-        dto.setStatus(order.getStatus());
-        dto.setAreaType(order.getAreaType());
-        return dto;
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+
+        order.setStatus(status);
+
+        return  orderMapper.toOrderResponseDTO(orderRepository.save(order));
     }
 } 

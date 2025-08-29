@@ -20,6 +20,14 @@ public enum ErrorCode {
     VALIDATION_ERROR(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Dữ liệu không hợp lệ"),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Lỗi truy vấn cơ sở dữ liệu"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy người dùng"),
+    USER_EXISTED(HttpStatus.BAD_REQUEST.value(), "Tài khoản người dùng đã tồn tại"),
+    UNAUTHENTICATED(HttpStatus.UNAUTHORIZED.value(), "Không đủ thẩm quyền"),
+    PASSWORD_CONFIRM_NOT_MATCH(400, "Mật khẩu xác nhận không khớp"),
+    TOKEN_SIGNING_FAILED(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Không thể tạo mã xác thực"),
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST.value(), "Token không hợp lệ"),
+    EMPLOYEE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST.value(), "Tài khoản nhân viễn đã tồn tại"),
+    USER_ASSIGNMENT_CANNOT_BE_CHANGED(HttpStatus.BAD_REQUEST.value(), "Không thể đổi user liên kết"),
+
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy đơn hàng");
 
 

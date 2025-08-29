@@ -2,10 +2,12 @@ package com.Demo_QuanLyBanHang.QuanLyBanHang.employee.dtos;
 
 import com.Demo_QuanLyBanHang.QuanLyBanHang.employee.entities.Employee;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.employee.entities.Employee.Gender;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
 
 public class EmployeeResponseDto {
 
@@ -33,14 +35,16 @@ public class EmployeeResponseDto {
     }
 
     public static EmployeeResponseDto fromEntity(Employee employee) {
+        User user = employee.getUser();
+
         return new EmployeeResponseDto(
                 employee.getEmployeeId(),
-                employee.getFullName(),
-                employee.getPhoneNumber(),
-                employee.getEmail(),
+                user.getFullName(),
+                user.getPhoneNumber(),
+                user.getEmail(),
                 employee.getBirthDate(),
                 employee.getGender(),
-                employee.getUserAccountId(),
+                user.getUserId(),
                 employee.getCreatedAt()
         );
     }
