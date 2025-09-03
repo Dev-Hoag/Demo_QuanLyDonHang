@@ -20,4 +20,5 @@ public class OrderRequestDTO {
     private String oderName;
     private double weight;
     private AreaType areaType;
+
 }

@@ -27,6 +27,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.BAD_REQUEST.value(), "Token không hợp lệ"),
     EMPLOYEE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST.value(), "Tài khoản nhân viễn đã tồn tại"),
     USER_ASSIGNMENT_CANNOT_BE_CHANGED(HttpStatus.BAD_REQUEST.value(), "Không thể đổi user liên kết"),
+    UNSUPPORTED_ADDRESS_REGION(HttpStatus.BAD_REQUEST.value(),"Khu vực không được hỗ trợ"),
 
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy đơn hàng");
 

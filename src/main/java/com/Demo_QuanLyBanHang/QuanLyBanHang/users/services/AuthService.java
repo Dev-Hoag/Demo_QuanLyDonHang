@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 @Service
@@ -39,8 +40,17 @@ public class AuthService {
 
     public AuthResponse signIn(SignIn request) {
 
-        User user = userRepository.findByEmailOrPhoneNumber(request.getPhoneNumber(), request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        String phoneNumberOrEmail = request.getEmailOrPhoneNumber();
+
+        Optional<User> optionalUser;
+
+        if(phoneNumberOrEmail.matches("^[0-9]{10,11}$")){
+            optionalUser = userRepository.findByPhoneNumber(phoneNumberOrEmail);
+        }
+        else{
+            optionalUser = userRepository.findByEmail(phoneNumberOrEmail);
+        }
+        User user = optionalUser.orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
 
         boolean isMatch = user.getPassword().equals(request.getPassword());
 
@@ -83,7 +93,7 @@ public class AuthService {
                 .issueTime(Date.from(now))
                 .expirationTime(Date.from(expiry))
                 .claim("userId", user.getUserId())
-                .claim("scope", buildScope(user))
+                .claim("roles", user.getRoles())
                 .build();
         JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS512), new Payload(claimSet.toJSONObject()));
         try{
@@ -170,15 +180,15 @@ public class AuthService {
         return signedJWT;
     }
 
-    private String buildScope(User user){
-        StringJoiner stringJoiner = new StringJoiner("");
-        if(!CollectionUtils.isEmpty(user.getRoles()))
-            user.getRoles().forEach(role -> {
-                stringJoiner.add(role.getName());
-                if(!CollectionUtils.isEmpty(role.getPermission())){
-                    role.getPermission().forEach(permission -> stringJoiner.add(permission.getName()));
-                }
-            });
-        return stringJoiner.toString();
-    }
+//    private String buildScope(User user){
+//        StringJoiner stringJoiner = new StringJoiner("");
+//        if(!CollectionUtils.isEmpty(user.getRoles()))
+//            user.getRoles().forEach(role -> {
+//                stringJoiner.add(role.getName());
+//                if(!CollectionUtils.isEmpty(role.getPermission())){
+//                    role.getPermission().forEach(permission -> stringJoiner.add(permission.getName()));
+//                }
+//            });
+//        return stringJoiner.toString();
+//    }
 }

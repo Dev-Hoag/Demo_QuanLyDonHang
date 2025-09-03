@@ -1,9 +1,7 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.common.config;
 
-import com.Demo_QuanLyBanHang.QuanLyBanHang.common.constants.PredefinedRole;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities.Role;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.Role;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities.User;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.users.repositories.RoleRepository;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
@@ -21,34 +19,26 @@ public class ApplicationInitConfig {
     private static final String ADMIN_EMAIL = "admin@gmail.com";
 
     @NonFinal
-    private static final String ADMIN_PASSWORD = "123456";
+    private static final String ADMIN_PASSWORD = "1234567890";
+
+    private final UserRepository userRepository;
 
     @Bean
-    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
+    ApplicationRunner applicationRunner() {
         return args -> {
             if(userRepository.findByEmail(ADMIN_EMAIL).isEmpty()) {
-                roleRepository.save(Role.builder()
-                        .name(PredefinedRole.USER_ROLE)
-                        .description("user role")
-                        .build());
-
-                Role adminRole = roleRepository.save(Role.builder()
-                        .name(PredefinedRole.ADMIN_ROLE)
-                        .description("admin role")
-                        .build());
-
-                var roles = new HashSet<Role>();
-
-                roles.add(adminRole);
+                Set<Role> roles = new HashSet<>();
+                roles.add(Role.ADMIN);
 
                 User user = User.builder()
                         .email(ADMIN_EMAIL)
                         .fullName("Admin")
-                        .address("Hồ Chí Minh, Việt Nam")
-                        .phoneNumber("0123456789")
-                        .password(ADMIN_PASSWORD)
+                        .address("33 Lâm Đình Trúc, TP.Lâm Đồng, tỉnh Phan Thiết")
+                        .phoneNumber("0869884725")
                         .roles(roles)
+                        .password(ADMIN_PASSWORD)
                         .build();
+
                 userRepository.save(user);
             }
         };

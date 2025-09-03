@@ -3,6 +3,8 @@ package com.Demo_QuanLyBanHang.QuanLyBanHang.orders.services;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.ErrorCode;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.exceptions.AppException;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.utils.AuthUtil;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.services.HubService;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.entities.Order;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.entities.OrderStatus;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.mappers.OrderMapper;
@@ -12,7 +14,6 @@ import com.Demo_QuanLyBanHang.QuanLyBanHang.orders.dtos.OrderResponseDTO;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities.User;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
+    private final HubService hubService;
 
     public OrderResponseDTO createOrder(OrderRequestDTO dto) {
 
@@ -34,11 +36,17 @@ public class OrderService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+        Hub hub = hubService.findHubByRegionOrAddress(dto.getAddress());
+
         Order order = orderMapper.toOrder(dto);
         order.setUser(user);
         order.setStatus(OrderStatus.CREATED);
+        order.setHub(hub);
+
+        hub.increaseOrderCount();
+
         Order result = orderRepository.save(order);
-        return orderMapper.toOrderResponseDTO(result);
+        return orderMapper.toOrderResponseDTO(orderRepository.save(result));
     }
 
     public List<OrderResponseDTO> getAllOrders() {
@@ -58,7 +66,7 @@ public class OrderService {
 
         orderMapper.updateOrder(order, dto);
 
-        return orderMapper.toOrderResponseDTO(order);
+        return orderMapper.toOrderResponseDTO(orderRepository.save(order));
     }
 
     public void deleteOrder(UUID id) {

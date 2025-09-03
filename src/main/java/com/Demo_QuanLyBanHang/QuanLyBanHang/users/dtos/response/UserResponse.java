@@ -1,5 +1,6 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.users.dtos.response;
 
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.Role;
 import lombok.*;
 
 import java.util.Set;
@@ -16,5 +17,5 @@ public class UserResponse {
     private String phoneNumber;
     private String email;
     private String address;
-    private Set<RoleResponse> roles;
+    private Set<Role> roles;
 }

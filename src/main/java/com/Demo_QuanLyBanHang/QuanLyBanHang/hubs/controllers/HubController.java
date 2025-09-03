@@ -75,7 +75,7 @@ public class HubController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping("/{hubName}")
+    @GetMapping("/name/{hubName}")
     public ResponseEntity<ApiResponse<HubResponse>> getHubByName(@PathVariable String hubName) {
         HubResponse hubResponse = hubService.getHubByName(hubName);
         var response = ApiResponse.<HubResponse>builder()
@@ -86,7 +86,7 @@ public class HubController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping("/{hubAddress}")
+    @GetMapping("/address/{hubAddress}")
     public ResponseEntity<ApiResponse<HubResponse>> getHubByAddress(@PathVariable String hubAddress) {
         HubResponse hubResponse = hubService.getHubByAddress(hubAddress);
         var response = ApiResponse.<HubResponse>builder()

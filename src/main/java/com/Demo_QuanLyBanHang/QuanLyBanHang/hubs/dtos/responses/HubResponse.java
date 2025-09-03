@@ -1,5 +1,6 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.responses;
 
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.enums.HubStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,6 @@ public class HubResponse {
     private String hubName;
     private String hubAddress;
     private String hubRegion;
+    private long orderCount;
+    private HubStatus hubStatus;
 }

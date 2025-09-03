@@ -1,6 +1,7 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.users.controllers;
 
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.dto.ApiResponse;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.utils.AuthUtil;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.dtos.request.UserUpdateRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.dtos.response.UserResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.services.UserService;
@@ -22,7 +23,10 @@ public class UserController {
 
     @GetMapping("/get-user-profile")
     public ResponseEntity<ApiResponse<UserResponse>> getUserProfile() {
-        UserResponse user = userService.getMyInfo();
+
+        UUID userid = AuthUtil.getUserIdFromContext();
+
+        UserResponse user = userService.getUserProfile(userid);
 
         var response = ApiResponse.<UserResponse>builder()
                 .statusCode(200)

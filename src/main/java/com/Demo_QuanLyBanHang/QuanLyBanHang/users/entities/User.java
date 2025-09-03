@@ -1,5 +1,6 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities;
 
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,10 @@ public class User {
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 
-    @ManyToMany
-    private Set<Role> roles;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<Role>  roles;
+
+//    @ManyToMany
+//    private Set<Role> roles;
 }

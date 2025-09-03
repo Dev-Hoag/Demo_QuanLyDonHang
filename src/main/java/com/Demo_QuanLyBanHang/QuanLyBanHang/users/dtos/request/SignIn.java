@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class SignIn {
-    private String email;
-    private String phoneNumber;
+    private String emailOrPhoneNumber;
     private String password;
 }

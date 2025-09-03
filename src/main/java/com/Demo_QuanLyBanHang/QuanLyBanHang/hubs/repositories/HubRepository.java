@@ -15,4 +15,5 @@ public interface HubRepository extends JpaRepository<Hub, UUID> {
     Optional<Hub> findByHubName(String hubName);
     Optional<Hub> findByHubAddress(String hubAddress);
     List<Hub> findByHubNameContainingIgnoreCaseAndHubAddressContainingIgnoreCase(String hubName, String hubAddress);
+    Optional<Hub> findTop1ByHubRegionIgnoreCaseOrderByOrderCountAsc(String hubRegion);
 }

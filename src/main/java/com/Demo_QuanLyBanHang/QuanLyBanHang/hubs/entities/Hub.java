@@ -1,5 +1,6 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities;
 
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.enums.HubStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,4 +26,15 @@ public class Hub {
 
     @Column(nullable = false, length = 50)
     private String hubRegion;
+
+    @Column(nullable = false, length = 255)
+    private long orderCount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private HubStatus hubStatus;
+
+    public void increaseOrderCount() {
+        this.orderCount++;
+    }
 }

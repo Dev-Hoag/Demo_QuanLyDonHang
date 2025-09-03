@@ -1,24 +1,25 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.users.services;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.common.constants.PredefinedRole;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.ErrorCode;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.exceptions.AppException;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.utils.AuthUtil;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.dtos.request.SignUp;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.dtos.request.UserUpdateRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.dtos.response.UserResponse;
-import com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities.Role;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities.User;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.mappers.UserMapper;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.repositories.RoleRepository;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.Role;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,11 +44,17 @@ public class UserService {
         }
 
         User user = userMapper.toUser(request);
-        HashSet<Role> roles = new HashSet<>();
-        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+        // Gán role mặc định là USER
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.USER); // sử dụng enum trực tiếp
         user.setRoles(roles);
 
         return userRepository.save(user);
+    }
+
+    public UserResponse getUserProfile(UUID userId){
+        User user = findByIdOrThrow(userId);
+        return userMapper.toUserResponse(user);
     }
 
     public UserResponse getMyInfo(){
@@ -73,15 +80,21 @@ public class UserService {
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public UserResponse updateUser(UUID userId, UserUpdateRequest updateRequest){
         User user = findByIdOrThrow(userId);
-        userMapper.updateUser(user, updateRequest);
-        var roles = roleRepository.findAllById(updateRequest.getRoles());
-        user.setRoles(new HashSet<>(roles));
-        return userMapper.toUserResponse(user);
-    }
 
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public UserResponse getUserProfile(UUID userId){
-        User user = findByIdOrThrow(userId);
+        // Cập nhật các trường cơ bản
+        userMapper.updateUser(user, updateRequest);
+
+        // Nếu có danh sách role từ client (kiểu List<String>), ta convert sang Set<Role> (enum)
+        if (updateRequest.getRoles() != null && !updateRequest.getRoles().isEmpty()) {
+            Set<Role> newRoles = updateRequest.getRoles().stream()
+                    .map(String::toUpperCase)
+                    .map(Role::valueOf) // convert từ String → Enum
+                    .collect(Collectors.toSet());
+            user.setRoles(newRoles);
+        }
+
+        userRepository.save(user);
+
         return userMapper.toUserResponse(user);
     }
 

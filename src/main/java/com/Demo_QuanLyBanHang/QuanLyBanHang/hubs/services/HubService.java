@@ -6,6 +6,7 @@ import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.HubRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.requests.HubUpdateRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.dtos.responses.HubResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.enums.HubStatus;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.mappers.HubMapper;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.repositories.HubRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,10 @@ public class HubService {
         }
 
         Hub hub = hubMapper.toHub(hubRequest);
-        return hubMapper.toHubResponse(hubRepository.save(hub));
+        hub.setOrderCount(0);
+        hub.setHubStatus(HubStatus.ACTIVE);
+        Hub result =  hubRepository.save(hub);
+        return hubMapper.toHubResponse(hubRepository.save(result));
     }
 
 //    @PreAuthorize("hasRole('ADMIN')")
@@ -42,6 +46,13 @@ public class HubService {
     public HubResponse getHubById(UUID id) {
         return hubMapper.toHubResponse(hubRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.HUB_NOT_FOUND)));
+    }
+
+    public Hub findHubByRegionOrAddress(String address) {
+        String city = detectCityFromAddress(address);
+
+        return hubRepository.findTop1ByHubRegionIgnoreCaseOrderByOrderCountAsc(city)
+                .orElseThrow(() -> new AppException(ErrorCode.HUB_NOT_FOUND));
     }
     
 //    @PreAuthorize("hasRole('ADMIN')")
@@ -73,4 +84,14 @@ public class HubService {
         return hubs.stream().map(hubMapper::toHubResponse).toList();
     }
 
+    private String detectCityFromAddress(String address) {
+        String lower =  address.toLowerCase();
+        if (lower.contains("hồ chí minh") || lower.contains("sài gòn")) {
+            return "HỒ CHÍ MINH";
+        } else if (lower.contains("hà nội")) {
+            return "HÀ NỘI";
+        } else {
+            throw new AppException(ErrorCode.UNSUPPORTED_ADDRESS_REGION); // định nghĩa thêm nếu cần
+        }
+    }
 }

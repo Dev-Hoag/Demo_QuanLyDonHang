@@ -1,5 +1,6 @@
 package com.Demo_QuanLyBanHang.QuanLyBanHang.orders.entities;
 
+import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.users.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,9 +13,10 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private String receiverName;
@@ -33,4 +35,8 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-} 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hub_id")
+    private Hub hub;
+
+}
