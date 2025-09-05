@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/price")
+@CrossOrigin(origins = "*")
 public class PriceController {
     @Autowired
     private PriceService priceService;
