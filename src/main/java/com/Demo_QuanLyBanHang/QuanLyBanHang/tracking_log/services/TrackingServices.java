@@ -15,7 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class TrackingServices {
 
-    private  TrackingRepository trackingRepository;
+    private final TrackingRepository trackingRepository;
+
+    public TrackingServices(TrackingRepository trackingRepository) {
+        this.trackingRepository = trackingRepository;
+    }
 
     // 1. Initialize tracking
     public TrackingResponseDto initializeTracking(InitializeTrackingDto dto) {

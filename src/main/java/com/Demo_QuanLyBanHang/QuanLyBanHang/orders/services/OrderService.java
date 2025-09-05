@@ -36,14 +36,15 @@ public class OrderService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        Hub hub = hubService.findHubByRegionOrAddress(dto.getAddress());
+       // Hub hub = hubService.findHubByRegionOrAddress(dto.getAddress());
 
         Order order = orderMapper.toOrder(dto);
         order.setUser(user);
+        order.setSenderName(dto.getSenderName());
         order.setStatus(OrderStatus.CREATED);
-        order.setHub(hub);
+       // order.setHub(hub);
 
-        hub.increaseOrderCount();
+        //hub.increaseOrderCount();
 
         Order result = orderRepository.save(order);
         return orderMapper.toOrderResponseDTO(orderRepository.save(result));
