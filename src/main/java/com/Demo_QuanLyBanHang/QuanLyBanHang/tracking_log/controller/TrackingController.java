@@ -5,6 +5,7 @@ import com.Demo_QuanLyBanHang.QuanLyBanHang.tracking_log.dtos.request.Initialize
 import com.Demo_QuanLyBanHang.QuanLyBanHang.tracking_log.dtos.request.UpdateTrackingDto;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.tracking_log.dtos.response.TrackingResponseDto;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.tracking_log.services.TrackingServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,8 @@ import java.util.UUID;
 @RequestMapping("/tracking")
 public class TrackingController {
 
-    private  TrackingServices trackingService;
+    @Autowired
+    private TrackingServices trackingService;
 
 
     // 1. Initialize

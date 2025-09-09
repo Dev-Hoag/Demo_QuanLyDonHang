@@ -20,6 +20,7 @@ public class Order {
     private UUID id;
 
     private String receiverName;
+    private String senderName;
     private String receiverPhoneNumber;
     private String address;
     private String oderName;
