@@ -3,6 +3,7 @@ package com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.controllers;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.dto.ApiResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.request.TransitLogRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.request.TransitLogUpdateRequest;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.response.TransitLogDashboardResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.response.TransitLogResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.services.TransitLogService;
 import jakarta.validation.Valid;
@@ -84,4 +85,14 @@ public class TransitLogController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @GetMapping("/dashboard")
+    public ResponseEntity<ApiResponse<TransitLogDashboardResponse>> getTransitLogDashboard() {
+        TransitLogDashboardResponse dashboardData = transLogService.getDashboardStatistics();
+        var response = ApiResponse.<TransitLogDashboardResponse>builder()
+                .statusCode(200)
+                .message("Lấy dữ liệu dashboard thành công")
+                .data(dashboardData)
+                .build();
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
 }

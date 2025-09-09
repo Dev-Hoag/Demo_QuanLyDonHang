@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.Role;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -26,9 +27,9 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
     private final UserMapper userMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     public User createUser(SignUp request){
         String email = request.getEmail().toLowerCase();
@@ -48,7 +49,7 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(Role.USER); // sử dụng enum trực tiếp
         user.setRoles(roles);
-
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         return userRepository.save(user);
     }
 

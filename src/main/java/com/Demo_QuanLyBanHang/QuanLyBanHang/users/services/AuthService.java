@@ -17,6 +17,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -25,7 +26,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
-import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +37,8 @@ public class AuthService {
     private final JwtProperties jwtProperties;
 
     private final InvalidatedTokenRepository invalidatedTokenRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     public AuthResponse signIn(SignIn request) {
 
@@ -52,7 +54,7 @@ public class AuthService {
         }
         User user = optionalUser.orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
 
-        boolean isMatch = user.getPassword().equals(request.getPassword());
+        boolean isMatch = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!isMatch) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);

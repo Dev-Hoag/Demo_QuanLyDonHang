@@ -4,6 +4,7 @@ import com.Demo_QuanLyBanHang.QuanLyBanHang.common.enums.ErrorCode;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.common.exceptions.AppException;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.request.TransitLogRequest;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.request.TransitLogUpdateRequest;
+import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.response.TransitLogDashboardResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.dtos.response.TransitLogResponse;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities.Hub;
 import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.entities.TransitLog;
@@ -13,7 +14,10 @@ import com.Demo_QuanLyBanHang.QuanLyBanHang.transitLog.repositories.TransitLogRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -80,4 +84,64 @@ public class TransitLogService {
         return transitLog.stream().map(transitLogMapper::toTransitLogResponse).collect(Collectors.toList());
     }
 
+    public double getAverageTransitDurationHours() {
+        List<TransitLog> logs = transitLogRepository.findAll();
+
+        if(logs.isEmpty()) {
+            return 0;
+        }
+
+        double totalHours = logs.stream()
+                .mapToDouble(log -> Duration.between(log.getTransArriveAt(), log.getTransDepartureAt()).toMinutes() / 60.0)
+                .sum();
+
+        return totalHours / logs.size();
+    }
+
+    public double getOnTimeRate(){
+        List<TransitLog> logs =  transitLogRepository.findAll();
+
+        if(logs.isEmpty()) {
+            return 0;
+        }
+
+        long onTimeCount = logs.stream()
+                .filter(log -> Duration.between(log.getTransArriveAt(), log.getTransDepartureAt()).toHours() <= 24)
+                .count();
+
+        return (double) onTimeCount / logs.size() * 100;
+    }
+
+    public Map<String, Long> getTopHandTo(int limit){
+        return transitLogRepository.findAll().stream()
+                .filter(log -> log.getHandTo() != null)
+                .collect(Collectors.groupingBy(TransitLog::getHandTo, Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(limit)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+    }
+
+    public Map<String, Long> getDistributionByHub() {
+        return transitLogRepository.findAll().stream()
+                .filter(log -> log.getHubs() != null)
+                .collect(Collectors.groupingBy(
+                        log -> log.getHubs().getHubName(), // assuming `Hub` has a `getName()` method
+                        Collectors.counting()
+                ));
+    }
+
+    public TransitLogDashboardResponse getDashboardStatistics() {
+        double avgHours = getAverageTransitDurationHours();
+        double onTime = getOnTimeRate();
+        Map<String, Long> topHand = getTopHandTo(10);
+        Map<String, Long> byHub = getDistributionByHub();
+
+        return new TransitLogDashboardResponse(avgHours, onTime, topHand, byHub);
+    }
 }
