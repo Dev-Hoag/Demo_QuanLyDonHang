@@ -25,4 +25,5 @@ public class OrderResponseDTO {
     private AreaType areaType;
     private Integer totalFee;
 
+
 }

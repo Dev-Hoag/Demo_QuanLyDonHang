@@ -67,6 +67,13 @@ public class OrderService {
         return orderRepository.findById(orderId)
                 .map(order ->  orderMapper.toOrderResponseDTO(order));
     }
+    public List<OrderResponseDTO> getOrderUserById() {
+        UUID userId = AuthUtil.getUserIdFromContext(); // lấy từ token
+        return orderRepository.findByUserId(userId)
+                .stream()
+                .map(orderMapper::toOrderResponseDTO)
+                .toList();
+    }
 
     public OrderResponseDTO updateOrder(UUID id, OrderRequestDTO dto) {
         Order order =  orderRepository.findById(id)

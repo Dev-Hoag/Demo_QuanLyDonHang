@@ -34,6 +34,15 @@ public class OrderController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/users")
+    public ResponseEntity<List<OrderResponseDTO>> getOrdersByUserId() {
+        List<OrderResponseDTO> orders = orderService.getOrderUserById();
+        if (orders.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(orders);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable UUID id, @RequestBody OrderRequestDTO orderRequest) {

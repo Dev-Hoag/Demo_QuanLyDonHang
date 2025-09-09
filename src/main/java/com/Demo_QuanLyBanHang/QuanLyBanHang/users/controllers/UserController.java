@@ -27,6 +27,7 @@ public class UserController {
         UUID userid = AuthUtil.getUserIdFromContext();
 
         UserResponse user = userService.getUserProfile(userid);
+        user.setUserId(userid);
 
         var response = ApiResponse.<UserResponse>builder()
                 .statusCode(200)
