@@ -8,6 +8,7 @@ import lombok.experimental.NonFinal;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +24,8 @@ public class ApplicationInitConfig {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Bean
     ApplicationRunner applicationRunner() {
         return args -> {
@@ -36,7 +39,7 @@ public class ApplicationInitConfig {
                         .address("33 Lâm Đình Trúc, TP.Lâm Đồng, tỉnh Phan Thiết")
                         .phoneNumber("0869884725")
                         .roles(roles)
-                        .password(ADMIN_PASSWORD)
+                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
                         .build();
 
                 userRepository.save(user);
