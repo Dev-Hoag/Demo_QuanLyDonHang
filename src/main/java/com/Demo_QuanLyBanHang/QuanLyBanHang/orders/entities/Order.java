@@ -25,6 +25,9 @@ public class Order {
     private String address;
     private String oderName;
     private double weight;
+    private String serviceType;
+    private Integer totalFee;
+    private String senderNumber;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

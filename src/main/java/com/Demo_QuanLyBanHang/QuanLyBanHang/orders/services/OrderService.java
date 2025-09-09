@@ -41,6 +41,13 @@ public class OrderService {
         Order order = orderMapper.toOrder(dto);
         order.setUser(user);
         order.setSenderName(dto.getSenderName());
+        order.setServiceType(dto.getServiceType());
+        order.setTotalFee(dto.getTotalFee());
+        order.setOderName(dto.getOderName());
+        order.setSenderNumber(dto.getSenderNumber());
+        System.out.println("DEBUG dto=" + dto.getOderName());
+        System.out.println("DEBUG order=" + order);
+
         order.setStatus(OrderStatus.CREATED);
        // order.setHub(hub);
 

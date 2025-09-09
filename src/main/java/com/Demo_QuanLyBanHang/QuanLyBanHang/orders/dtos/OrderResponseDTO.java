@@ -13,14 +13,16 @@ import java.util.UUID;
 @Builder
 public class OrderResponseDTO {
     private UUID id;
-    private String orderName;
+    private String oderName;
+    private String serviceType;
     private String senderName;
     private String senderNumber;
     private String receiverName;
     private String receiverPhoneNumber;
     private String address;
     private OrderStatus status;
-    private String oderName;
     private double weight;
     private AreaType areaType;
+    private Integer totalFee;
+
 }

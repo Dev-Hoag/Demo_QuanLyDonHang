@@ -25,7 +25,7 @@ public class TrackingServices {
     public TrackingResponseDto initializeTracking(InitializeTrackingDto dto) {
         Tracking tracking = new Tracking();
         tracking.setOrderId(dto.getOrderId()); // just set ID, no query to Order
-        tracking.setStatus("Initialized");
+        tracking.setStatus("Created");
         tracking.setUpdatedBy("System");
 
         return TrackingResponseDto.fromEntity(trackingRepository.save(tracking));

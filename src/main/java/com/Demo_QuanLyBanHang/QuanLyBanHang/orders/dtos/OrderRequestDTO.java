@@ -12,6 +12,8 @@ import java.util.UUID;
 @Builder
 public class OrderRequestDTO {
 //    private UUID senderId;
+    private String serviceType;
+    private Integer totalFee;
     private String senderName;
     private String senderNumber;
     private String receiverName;
