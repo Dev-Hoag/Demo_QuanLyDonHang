@@ -1,0 +1,31 @@
+package com.Demo_QuanLyBanHang.QuanLyBanHang.hubs.entities;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.UUID;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Hub {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true, nullable = false)
+    private UUID hubId;
+
+    @Column(nullable = false, unique = true, length = 255)
+    private String hubName;
+
+    @Column(nullable = false, unique = false, length = 255)
+    private String hubAddress;
+
+    @Column(nullable = false, length = 50)
+    private String hubRegion;
+
+    @Column(length = 50)
+    private String hubNote;
+}

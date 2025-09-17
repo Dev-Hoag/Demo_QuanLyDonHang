@@ -1,0 +1,14 @@
+server:
+  port: ${PORT:9000}
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+    username: postgres.jdogabuoifwjfvblnnld
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
